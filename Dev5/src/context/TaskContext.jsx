@@ -14,7 +14,7 @@ export const TaskProvider = ({ children }) => {
   /**
    * Adds a new task to the task list.
    *
-   * @param {object} task - The task to be added (id, text, completed).
+   * @param {object} task - The task to be added (id, text, completed, priority).
    */
   const addTask = (task) => {
     setTasks((prevTasks) => [...prevTasks, task]);
@@ -42,8 +42,23 @@ export const TaskProvider = ({ children }) => {
     );
   };
 
+  /**
+   * Toggles the priority of a task between 'High' and 'Low'.
+   *
+   * @param {number} id - The ID of the task to toggle priority.
+   */
+  const togglePriority = (id) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, priority: task.priority === 'High' ? 'Low' : 'High' } : task
+      )
+    );
+  };
+
   return (
-    <TaskContext.Provider value={{ tasks, addTask, removeTask, toggleComplete }}>
+    <TaskContext.Provider
+      value={{ tasks, addTask, removeTask, toggleComplete, togglePriority }}
+    >
       {children}
     </TaskContext.Provider>
   );

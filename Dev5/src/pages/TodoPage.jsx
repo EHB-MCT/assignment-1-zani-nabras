@@ -3,12 +3,12 @@ import { TaskContext } from '../context/TaskContext';
 
 /**
  * TodoPage component renders the main interface of the Todo App.
- * It allows users to add, complete, and remove tasks, with filtering functionality.
+ * It allows users to add, complete, prioritize, and remove tasks, with filtering functionality.
  */
 const TodoPage = () => {
-  const { tasks, addTask, removeTask, toggleComplete } = useContext(TaskContext);
+  const { tasks, addTask, removeTask, toggleComplete, togglePriority } = useContext(TaskContext);
   const [newTask, setNewTask] = useState('');
-  const [filter, setFilter] = useState('all'); // State to manage filter: 'all', 'completed', or 'incomplete'
+  const [filter, setFilter] = useState('all'); // State to manage filter: 'all', 'completed', 'incomplete', 'high', 'low'
 
   /**
    * Handles the addition of a new task.
@@ -16,7 +16,7 @@ const TodoPage = () => {
    */
   const handleAddTask = () => {
     if (newTask.trim()) {
-      addTask({ id: Date.now(), text: newTask, completed: false });
+      addTask({ id: Date.now(), text: newTask, completed: false, priority: 'Low' });
       setNewTask('');
     }
   };
@@ -27,12 +27,13 @@ const TodoPage = () => {
   const filteredTasks = tasks.filter((task) => {
     if (filter === 'completed') return task.completed;
     if (filter === 'incomplete') return !task.completed;
+    if (filter === 'high') return task.priority === 'High';
+    if (filter === 'low') return task.priority === 'Low';
     return true; // 'all'
   });
 
   return (
     <div className="flex flex-col items-center bg-gray-100 p-8 rounded-lg shadow-lg max-w-3xl w-full">
-
       {/* Input and Add Button */}
       <div className="flex w-full max-w-2xl mb-8">
         <input
@@ -43,7 +44,6 @@ const TodoPage = () => {
           placeholder="What do you want to do?"
           aria-label="Enter a new task"
         />
-
         <button
           onClick={handleAddTask}
           className="bg-blue-500 text-white px-6 rounded-r-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
@@ -54,33 +54,19 @@ const TodoPage = () => {
 
       {/* Filter Buttons */}
       <div className="flex space-x-4 mb-8">
-        <button
-          onClick={() => setFilter('all')}
-          className={`px-6 py-2 rounded-full ${
-            filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
-          } hover:bg-blue-400 hover:text-white focus:ring-2 focus:ring-blue-400 focus:outline-none`}
-          aria-label="Show all tasks"
-        >
-          All
-        </button>
-        <button
-          onClick={() => setFilter('completed')}
-          className={`px-6 py-2 rounded-full ${
-            filter === 'completed' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
-          } hover:bg-blue-400 hover:text-white focus:ring-2 focus:ring-blue-400 focus:outline-none`}
-          aria-label="Show completed tasks"
-        >
-          Completed
-        </button>
-        <button
-          onClick={() => setFilter('incomplete')}
-          className={`px-6 py-2 rounded-full ${
-            filter === 'incomplete' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
-          } hover:bg-blue-400 hover:text-white focus:ring-2 focus:ring-blue-400 focus:outline-none`}
-          aria-label="Show incomplete tasks"
-        >
-          Incomplete
-        </button>
+        {['all', 'completed', 'incomplete', 'high', 'low'].map((filterOption) => (
+          <button
+            key={filterOption}
+            onClick={() => setFilter(filterOption)}
+            className={`px-6 py-2 rounded-full ${
+              filter === filterOption
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-300 text-gray-700'
+            } hover:bg-blue-400 hover:text-white focus:ring-2 focus:ring-blue-400 focus:outline-none`}
+          >
+            {filterOption.charAt(0).toUpperCase() + filterOption.slice(1)}
+          </button>
+        ))}
       </div>
 
       {/* Task List */}
@@ -92,7 +78,9 @@ const TodoPage = () => {
               task.completed ? 'opacity-75 line-through' : ''
             }`}
           >
-            <span className="text-lg text-gray-800">{task.text}</span>
+            <span className={`text-lg ${task.priority === 'High' ? 'text-red-500' : 'text-gray-800'}`}>
+              {task.text} - <strong>{task.priority}</strong>
+            </span>
             <div className="flex space-x-2">
               <button
                 onClick={() => toggleComplete(task.id)}
@@ -103,6 +91,12 @@ const TodoPage = () => {
                 }`}
               >
                 {task.completed ? 'Undo' : 'Complete'}
+              </button>
+              <button
+                onClick={() => togglePriority(task.id)}
+                className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600"
+              >
+                {task.priority === 'High' ? 'Set Low' : 'Set High'}
               </button>
               <button
                 onClick={() => removeTask(task.id)}
