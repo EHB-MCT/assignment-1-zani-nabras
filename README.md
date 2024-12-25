@@ -37,6 +37,7 @@ Follow these steps to set up and run the project locally:
 - **Reusable Components**: Modular design with reusable components.
 - **Global State Management**: Integrated React Context for managing application-wide state.
 - **Tailwind CSS**: Utility-first CSS framework for rapid UI development.
+- **Task Prioritization**: Easily prioritize tasks as 'High' or 'Low'.
 - **Custom Hooks**: Built-in hooks for enhanced reusability.
 - **Responsive Design**: Fully responsive with mobile-first principles.
 - **Deployment Ready**: Easily deploy to platforms like Netlify or Vercel.
