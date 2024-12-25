@@ -1,6 +1,6 @@
 # Challenge 1: The Perfect Setup
 
-This project is a starter file for React-based projects. The goal of this project is to provide a standard structure with all the conventions, documentation, and tools required for a successful React project. Here I made a basic To do app as example code.
+This project is a starter file for React-based projects. The goal of this project is to provide a standard structure with all the conventions, documentation, and tools required for a successful React project. Here we made a basic **To do app** as example code.
 
 ---
 
