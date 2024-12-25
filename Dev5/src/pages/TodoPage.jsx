@@ -33,9 +33,10 @@ const TodoPage = () => {
   });
 
   return (
-    <div className="flex flex-col items-center bg-gray-100 p-8 rounded-lg shadow-lg max-w-3xl w-full">
+    <div className="flex flex-col items-center bg-gray-100 p-8 rounded-lg shadow-lg max-w-4xl w-full">
+
       {/* Input and Add Button */}
-      <div className="flex w-full max-w-2xl mb-8">
+      <div className="flex w-full max-w-3xl mb-8">
         <input
           type="text"
           value={newTask}
@@ -58,7 +59,7 @@ const TodoPage = () => {
           <button
             key={filterOption}
             onClick={() => setFilter(filterOption)}
-            className={`px-6 py-2 rounded-full ${
+            className={`px-5 py-2 rounded-full text-sm ${
               filter === filterOption
                 ? 'bg-blue-500 text-white'
                 : 'bg-gray-300 text-gray-700'
@@ -70,47 +71,58 @@ const TodoPage = () => {
       </div>
 
       {/* Task List */}
-      <ul className="w-full max-w-2xl space-y-4">
-        {filteredTasks.map((task) => (
-          <li
-            key={task.id}
-            className={`flex justify-between items-center p-4 bg-white border rounded-lg shadow-md ${
-              task.completed ? 'opacity-75 line-through' : ''
-            }`}
-          >
-            <span className={`text-lg ${task.priority === 'High' ? 'text-red-500' : 'text-gray-800'}`}>
-              {task.text} - <strong>{task.priority}</strong>
-            </span>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => toggleComplete(task.id)}
-                className={`px-4 py-2 rounded-full ${
-                  task.completed
-                    ? 'bg-green-500 text-white hover:bg-green-400'
-                    : 'bg-gray-300 text-gray-700 hover:bg-green-500 hover:text-white'
-                }`}
-              >
-                {task.completed ? 'Undo' : 'Complete'}
-              </button>
-              <button
-                onClick={() => togglePriority(task.id)}
-                className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600"
-              >
-                {task.priority === 'High' ? 'Set Low' : 'Set High'}
-              </button>
-              <button
-                onClick={() => removeTask(task.id)}
-                className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
-              >
-                Remove
-              </button>
-            </div>
-          </li>
-        ))}
+      <ul className="w-full max-w-3xl space-y-6">
+        {filteredTasks.length > 0 ? (
+          filteredTasks.map((task) => (
+            <li
+              key={task.id}
+              className={`flex justify-between items-center p-4 bg-white border rounded-lg shadow-md ${
+                task.completed ? 'opacity-75 line-through' : ''
+              }`}
+            >
+              <div className="flex-1 pr-6 text-lg truncate">
+                <span
+                  className={`${
+                    task.priority === 'High' ? 'text-red-500' : 'text-gray-800'
+                  }`}
+                >
+                  {task.text}
+                </span>
+                <span className="ml-2 font-semibold">- {task.priority}</span>
+              </div>
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => toggleComplete(task.id)}
+                  className={`px-5 py-2 rounded-full text-sm ${
+                    task.completed
+                      ? 'bg-green-500 text-white hover:bg-green-400'
+                      : 'bg-gray-300 text-gray-700 hover:bg-green-500 hover:text-white'
+                  }`}
+                >
+                  {task.completed ? 'Undo' : 'Complete'}
+                </button>
+                <button
+                  onClick={() => togglePriority(task.id)}
+                  className="bg-blue-500 text-white px-5 py-2 rounded-full text-sm hover:bg-blue-600"
+                >
+                  {task.priority === 'High' ? 'Set Low' : 'Set High'}
+                </button>
+                <button
+                  onClick={() => removeTask(task.id)}
+                  className="bg-red-500 text-white px-5 py-2 rounded-full text-sm hover:bg-red-600"
+                >
+                  Remove
+                </button>
+              </div>
+            </li>
+          ))
+        ) : (
+          <li className="text-center text-gray-500">No tasks available for this filter.</li>
+        )}
       </ul>
 
       {/* Footer */}
-      <footer className="mt-8 text-gray-500">
+      <footer className="mt-8 text-gray-500 text-sm">
         Made with ❤️ by <strong>Zani & Nabras</strong>
       </footer>
     </div>
